@@ -59,8 +59,8 @@ func main() {
 	app, err := yanktv.New(c)
 	handleErr(err)
 
-	//err = app.UpdateShows()
-	//handleErr(err)
+	err = app.UpdateShows()
+	handleErr(err)
 
 	torrents, err := app.GetTorrentsFromLastMonth()
 	handleErr(err)
@@ -74,7 +74,7 @@ func main() {
 const tmplBase string = `<!DOCTYPE html>
 <html>
 	<head>
-		<title>Latest torrents for tv shows</title>
+		<title>Latest episodes</title>
 		<style type="text/css">
 			body {
 				margin: 20px 40px;
@@ -129,11 +129,11 @@ const tmplBase string = `<!DOCTYPE html>
 				</ol>
 			</article>
 		{{else}}
-			<p>Sorry, no tv shows in the database!</p>
+			<p>Sorry, no episodes in the database!</p>
 		{{- end}}
 		</section>
 		<footer>
-			Generated with <a href="https://github.com/lmas/feedloggr2">Feedloggr2</a>
+			Generated with <a href="https://github.com/lmas/yanktv">Yanktv</a>
 		</footer>
 	</body>
 </html>
