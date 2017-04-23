@@ -63,8 +63,8 @@ func main() {
 	app, err := yanktv.New(c)
 	handleErr(err)
 
-	//err = app.UpdateShows()
-	//handleErr(err)
+	err = app.UpdateShows()
+	handleErr(err)
 
 	torrents, err := app.GetTorrentsFromLastMonth()
 	handleErr(err)
