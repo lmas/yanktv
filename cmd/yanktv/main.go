@@ -116,6 +116,9 @@ const tmplBase string = `<!DOCTYPE html>
 				text-align: center;
 				font-size: 12px;
 			}
+			.center {
+				text-align: center;
+			}
 		</style>
 	</head>
 	<body>
@@ -129,7 +132,7 @@ const tmplBase string = `<!DOCTYPE html>
 				</ol>
 			</article>
 		{{else}}
-			<p>Sorry, no episodes in the database!</p>
+			<p class="center">Sorry, no episodes in the database!</p>
 		{{- end}}
 		</section>
 		<footer>
