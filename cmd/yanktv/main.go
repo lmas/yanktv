@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"html/template"
 	"os"
 	"path/filepath"
@@ -8,6 +9,10 @@ import (
 
 	"github.com/lmas/yanktv"
 	_ "github.com/lmas/yanktv/sites"
+)
+
+var (
+	fConf = flag.String("conf", ".yanktv.conf", "path to config file")
 )
 
 type TorrentGroup struct {
@@ -44,14 +49,9 @@ func handleErr(err error) {
 }
 
 func main() {
-	funcMap := template.FuncMap{
-		"safeUrl": func(s string) template.URL {
-			return template.URL(s)
-		},
-	}
-	tmpl := template.Must(template.New("base").Funcs(funcMap).Parse(tmplBase))
+	flag.Parse()
 
-	c, err := yanktv.LoadConf(".yanktv.conf") // TODO: add flag for custom path
+	c, err := yanktv.LoadConf(*fConf)
 	handleErr(err)
 
 	err = os.MkdirAll(filepath.Dir(c.OutputFile), 0777)
@@ -59,6 +59,13 @@ func main() {
 	f, err := os.Create(c.OutputFile)
 	handleErr(err)
 	defer f.Close()
+
+	funcMap := template.FuncMap{
+		"safeUrl": func(s string) template.URL {
+			return template.URL(s)
+		},
+	}
+	tmpl := template.Must(template.New("base").Funcs(funcMap).Parse(tmplBase))
 
 	app, err := yanktv.New(c)
 	handleErr(err)
