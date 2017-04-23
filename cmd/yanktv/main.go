@@ -3,6 +3,7 @@ package main
 import (
 	"html/template"
 	"os"
+	"path/filepath"
 	"sort"
 
 	"github.com/lmas/yanktv"
@@ -50,18 +51,20 @@ func main() {
 	}
 	tmpl := template.Must(template.New("base").Funcs(funcMap).Parse(tmplBase))
 
-	f, err := os.Create("index.html")
-	handleErr(err)
-	defer f.Close()
-
 	c, err := yanktv.LoadConf(".yanktv.conf") // TODO: add flag for custom path
 	handleErr(err)
+
+	err = os.MkdirAll(filepath.Dir(c.OutputFile), 0777)
+	handleErr(err)
+	f, err := os.Create(c.OutputFile)
+	handleErr(err)
+	defer f.Close()
 
 	app, err := yanktv.New(c)
 	handleErr(err)
 
-	err = app.UpdateShows()
-	handleErr(err)
+	//err = app.UpdateShows()
+	//handleErr(err)
 
 	torrents, err := app.GetTorrentsFromLastMonth()
 	handleErr(err)

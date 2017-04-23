@@ -12,7 +12,7 @@ type Conf struct {
 	Verbose         bool
 	DownloadTimeout int // in seconds
 	Shows           []string
-	//OutputFile      string // TODO
+	OutputFile      string
 
 	Database DatabaseConf
 }
