@@ -6,6 +6,7 @@ import (
 	"sort"
 
 	"github.com/lmas/yanktv"
+	_ "github.com/lmas/yanktv/sites"
 )
 
 type TorrentGroup struct {
