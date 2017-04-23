@@ -78,12 +78,5 @@ func (app *App) GetTorrentsFromLastMonth() ([]Torrent, error) {
 }
 
 func (app *App) openDoc(url string) (*goquery.Document, error) {
-	//if *fDebug {
-	//f, err := os.Open("tmp/dumps/" + url)
-	//if err != nil {
-	//return nil, err
-	//}
-	//return goquery.NewDocumentFromReader(f)
-	//}
 	return goquery.NewDocument(url)
 }
