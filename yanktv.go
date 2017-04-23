@@ -12,11 +12,11 @@ import (
 var reTvShow = regexp.MustCompile(`(.*).(S\d\dE\d\d).*(HDTV|WEBRIP).*X264`)
 
 type App struct {
-	conf *Conf
+	conf Conf
 	db   *database
 }
 
-func New(c *Conf) (*App, error) {
+func New(c Conf) (*App, error) {
 	db, err := openDB(c.Database)
 	if err != nil {
 		return nil, err

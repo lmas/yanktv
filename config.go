@@ -1,9 +1,6 @@
 package yanktv
 
 import (
-	"net/url"
-	"strings"
-
 	"github.com/BurntSushi/toml"
 )
 
@@ -20,20 +17,11 @@ type Conf struct {
 	Database DatabaseConf
 }
 
-// TODO: remove the pointer usage?
-func LoadConf(path string) (*Conf, error) {
-	var c *Conf
+func LoadConf(path string) (Conf, error) {
+	var c Conf
 	_, err := toml.DecodeFile(path, &c)
 	if err != nil {
-		return nil, err
+		return Conf{}, err
 	}
 	return c, nil
-}
-
-func (c *Conf) searchUrl(search string) string {
-	s := url.QueryEscape(strings.TrimSpace(search))
-	//if *fDebug {
-	//return s
-	//}
-	return strings.Replace(c.TorrentURL, "%SEARCH", s, -1)
 }
