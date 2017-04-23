@@ -14,8 +14,8 @@ type DatabaseConf struct {
 type Conf struct {
 	Verbose         bool
 	DownloadTimeout int // in seconds
-	TorrentURL      string
 	Shows           []string
+	//OutputFile      string // TODO
 
 	Database DatabaseConf
 }
