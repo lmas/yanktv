@@ -2,6 +2,7 @@ package yanktv
 
 import (
 	"log"
+	"net/http"
 	"net/url"
 	"strings"
 	"time"
@@ -9,9 +10,12 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+const userAgent string = "yanktv/0.2"
+
 type App struct {
-	conf Conf
-	db   *database
+	conf      Conf
+	db        *database
+	webClient *http.Client
 }
 
 func New(c Conf) (*App, error) {
@@ -20,9 +24,14 @@ func New(c Conf) (*App, error) {
 		return nil, err
 	}
 
+	client := &http.Client{
+		Timeout: 60 * time.Second,
+	}
+
 	app := &App{
-		conf: c,
-		db:   db,
+		conf:      c,
+		db:        db,
+		webClient: client,
 	}
 	return app, nil
 }
@@ -77,8 +86,26 @@ func (app *App) GetTorrentsFromLastMonth() ([]Torrent, error) {
 	return torrents, nil
 }
 
-func (app *App) openDoc(url string) (*goquery.Document, error) {
-	// TODO: use a custom http client and manually open url,
-	// don't trust goquery (and it's user agent)
-	return goquery.NewDocument(url)
+func (app *App) openDoc(webURL string) (*goquery.Document, error) {
+	u, err := url.Parse(webURL)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("User-Agent", userAgent)
+	resp, err := app.webClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	doc, err := goquery.NewDocumentFromResponse(resp)
+	if err != nil {
+		return nil, err
+	}
+	return doc, nil
 }
