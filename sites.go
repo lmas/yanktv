@@ -8,7 +8,7 @@ import (
 
 type Site interface {
 	Url(string) string
-	ParseTorrents(*goquery.Document) []Torrent
+	ParseTorrents(string, *goquery.Document) []Torrent
 }
 
 var (

@@ -58,7 +58,7 @@ func (app *App) updateShow(show string) error {
 			app.Log("Failed to open %s: %s", url, err)
 			continue
 		}
-		new := s.ParseTorrents(doc)
+		new := s.ParseTorrents(show, doc)
 		torrents = append(torrents, new...)
 	}
 
@@ -78,5 +78,7 @@ func (app *App) GetTorrentsFromLastMonth() ([]Torrent, error) {
 }
 
 func (app *App) openDoc(url string) (*goquery.Document, error) {
+	// TODO: use a custom http client and manually open url,
+	// don't trust goquery (and it's user agent)
 	return goquery.NewDocument(url)
 }

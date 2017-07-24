@@ -25,7 +25,8 @@ func (p *PirateBay) Url(search string) string {
 	return strings.Replace(piratebayUrlBase, "%SEARCH", search, -1)
 }
 
-func (p *PirateBay) ParseTorrents(doc *goquery.Document) []yanktv.Torrent {
+func (p *PirateBay) ParseTorrents(s string, doc *goquery.Document) []yanktv.Torrent {
+	show := strings.Title(strings.ToLower(s))
 	now := time.Now()
 	var torrents []yanktv.Torrent
 
@@ -40,6 +41,11 @@ func (p *PirateBay) ParseTorrents(doc *goquery.Document) []yanktv.Torrent {
 		}
 
 		title := strings.Title(strings.ToLower(strings.Replace(parts[1], ".", " ", -1)))
+		if !strings.HasPrefix(title, show) {
+			// Avoids false positives (episodes from other shows we're not interested in)
+			return
+		}
+
 		episode := parts[2]
 
 		// Finally grab the magnet link for it.
